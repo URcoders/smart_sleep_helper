@@ -30,7 +30,7 @@ public class InitHandler extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel channel) throws Exception {
         channel.pipeline()
-                .addLast("idleStateHandler", new IdleStateHandler(10, 20, 30, TimeUnit.SECONDS))
+                .addLast("idleStateHandler", new IdleStateHandler(60, 60, 100, TimeUnit.SECONDS))
                 .addLast(decoder)
                 .addLast(encoder)
                 .addLast(tcpHandler)

@@ -12,8 +12,9 @@ import java.util.Date;
 @Data
 @Service
 public class Rate {
-    private String deviceId;
-    private String time;
+    private Integer deviceId;
+    //private String time;
+    private Date time;
     private int signal;
     private int heartAvg;
     private int breathAvg;

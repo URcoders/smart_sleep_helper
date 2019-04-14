@@ -16,7 +16,7 @@ import java.sql.SQLException;
  * @author linxu
  */
 @Configuration
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:datasource.properties")
 public class DruidDbConfig {
     private Logger logger = LoggerFactory.getLogger(DruidDbConfig.class);
 

@@ -1,6 +1,5 @@
 package com.linxu.pillow.service.impl;
 
-import com.google.gson.JsonSyntaxException;
 import com.linxu.pillow.dao.RateDao;
 import com.linxu.pillow.dtos.EmbeddedData;
 import com.linxu.pillow.models.Rate;
@@ -10,7 +9,9 @@ import com.linxu.pillow.utils.ResolveUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,6 +24,7 @@ public class EmbeddedServiceImplV1<T> implements EmbeddedService<T> {
     @Autowired
     private RateDao rateDao;
     @Override
+    @Transactional(rollbackFor = IOException.class)
     public boolean resolve(T data) {
         if (EmptyUtil.isEmpty(data)) {
             return false;

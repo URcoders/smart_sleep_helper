@@ -2,21 +2,21 @@ package com.linxu.pillow.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.linxu.pillow.models.Rate;
+import com.linxu.pillow.models.Report;
 import lombok.Data;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * @author linxu
- * @date 2019/4/13
- * 接收嵌入式数据
+ * @date 2019/4/14
  */
 @Data
-@Service
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class EmbeddedData {
-    private Integer blueteeth;
-    private Integer wifi;
+public class WrapData {
+    private List adviceList;
+    private Report report;
     private List<Rate> rateList;
+    //鐧诲綍杩斿洖鐨勭敤鎴稩D
+    private Integer id;
 }

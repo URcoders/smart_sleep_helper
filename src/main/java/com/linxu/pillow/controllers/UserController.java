@@ -12,4 +12,5 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RequestMapping("/usercenter")
 public class UserController {
+
 }
