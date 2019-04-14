@@ -1,5 +1,7 @@
 package com.linxu.pillow.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.linxu.pillow.models.User;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
  */
 @Data
 @Service
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseData {
     private Integer code;
     private String msg;

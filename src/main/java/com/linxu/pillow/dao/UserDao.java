@@ -1,5 +1,6 @@
 package com.linxu.pillow.dao;
 
+import com.linxu.pillow.models.User;
 import org.apache.ibatis.annotations.*;
 
 /**
@@ -13,4 +14,10 @@ public interface UserDao {
             @Result(property = "deviceId",column = "device_id")
     )
     int queryDeviceIdByUserId(@Param("id") int integer);
+    @Insert("insert into user open_id values #{open_id} ")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
+    Integer userRegister(@Param("open_id")String openId);
+    @Select("select id from user where open_id = #{open_id}")
+    Integer isRegisterOrNot(@Param("open_id")String openId);
+
 }

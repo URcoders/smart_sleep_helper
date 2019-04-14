@@ -9,6 +9,7 @@ import com.linxu.pillow.dtos.WrapData;
 import com.linxu.pillow.enums.MsgStatus;
 import com.linxu.pillow.models.Rate;
 import com.linxu.pillow.models.Report;
+import com.linxu.pillow.models.WxAuthMsg;
 import com.linxu.pillow.service.UserService;
 import com.linxu.pillow.utils.DateUtil;
 import com.linxu.pillow.utils.EmptyUtil;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
         ResponseData responseData = new ResponseData();
         WrapData wrapData = new WrapData();
         //query database
-        List<Rate> rateList = rateDao.queryRateListByDeviceIdAndTime(date, DateUtil.addDay(date),1);
+        List<Rate> rateList = rateDao.queryRateListByDeviceIdAndTime(date, DateUtil.addDay(date), userDao.queryDeviceIdByUserId(id));
         //set embedded data
         EmbeddedData embeddedData = new EmbeddedData();
         embeddedData.setRateList(rateList);
@@ -70,5 +71,36 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseData queryAdvice(int id) {
         return null;
+    }
+
+    @Override
+    public ResponseData login(String code) {
+        if (EmptyUtil.isEmpty(code)) {
+            System.err.println("code null");
+            return null;
+        }
+        ResponseData responseData = new ResponseData();
+        WrapData wrapData = new WrapData();
+        WxAuthMsg wxAuthMsg = ResolveUtil.gsonWoker.fromJson(RequestUtil.code2Session(code), WxAuthMsg.class);
+        Integer userId;
+        if (EmptyUtil.isEmpty(wxAuthMsg) || EmptyUtil.isEmpty(wxAuthMsg.getOpenid())) {
+            responseData.setCode(-1);
+            responseData.setMsg(MsgStatus.ERROR.getMsg());
+        } else if ((userId = userDao.isRegisterOrNot(wxAuthMsg.getOpenid())) != 0) {
+            //已经注册
+            wrapData.setId(userId);
+            responseData.setMsg(MsgStatus.SUCCESS.getMsg());
+            responseData.setCode(0);
+            responseData.setData(wrapData);
+
+        } else {
+            //未注册
+            userId = userDao.userRegister(wxAuthMsg.getOpenid());
+            wrapData.setId(userId);
+            responseData.setMsg(MsgStatus.SUCCESS.getMsg());
+            responseData.setCode(0);
+            responseData.setData(wrapData);
+        }
+        return responseData;
     }
 }

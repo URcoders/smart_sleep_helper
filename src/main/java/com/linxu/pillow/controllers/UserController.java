@@ -1,8 +1,8 @@
 package com.linxu.pillow.controllers;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.linxu.pillow.dtos.Code;
+import com.linxu.pillow.dtos.ResponseData;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author linxu
@@ -12,5 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RequestMapping("/usercenter")
 public class UserController {
+    @PostMapping("/login")
+    public ResponseData login(@RequestBody Code code){
+
+        return null;
+    }
+    @GetMapping("/info")
+    public ResponseData queryUserInfo(@RequestParam("id")int id){
+        return null;
+    }
 
 }

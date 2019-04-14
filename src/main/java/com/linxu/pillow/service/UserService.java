@@ -9,4 +9,5 @@ import com.linxu.pillow.dtos.ResponseData;
 public interface UserService {
     ResponseData querySleepReport(String date,int id);
     ResponseData queryAdvice(int id);
+    ResponseData login(String code);
 }
