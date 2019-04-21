@@ -1,5 +1,6 @@
 package com.linxu.pillow.service.impl;
 
+import com.linxu.pillow.dao.AdviceDao;
 import com.linxu.pillow.dao.RateDao;
 import com.linxu.pillow.dao.ReportDao;
 import com.linxu.pillow.dao.UserDao;
@@ -7,9 +8,7 @@ import com.linxu.pillow.dtos.EmbeddedData;
 import com.linxu.pillow.dtos.ResponseData;
 import com.linxu.pillow.dtos.WrapData;
 import com.linxu.pillow.enums.MsgStatus;
-import com.linxu.pillow.models.Rate;
-import com.linxu.pillow.models.Report;
-import com.linxu.pillow.models.WxAuthMsg;
+import com.linxu.pillow.models.*;
 import com.linxu.pillow.service.UserService;
 import com.linxu.pillow.utils.DateUtil;
 import com.linxu.pillow.utils.EmptyUtil;
@@ -18,6 +17,7 @@ import com.linxu.pillow.utils.ResolveUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -32,6 +32,8 @@ public class UserServiceImpl implements UserService {
     private ReportDao reportDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private AdviceDao adviceDao;
 
     @Override
     public ResponseData querySleepReport(String date, int id) {
@@ -69,8 +71,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseData queryAdvice(int id) {
-        return null;
+    public ResponseData queryAdvice(int id) throws Exception{
+        ResponseData responseData = new ResponseData();
+        WrapData wrapData = new WrapData();
+        List<Integer> ids = adviceDao.queryAdviceIdsByUserId(id);
+        List<Advice> adviceList = new LinkedList<>();
+        for (Integer adviceId : ids
+                ) {
+            adviceList.add(adviceDao.queryAdviceByAdviceId(adviceId));
+        }
+        responseData.setCode(0);
+        responseData.setMsg(MsgStatus.SUCCESS.getMsg());
+        wrapData.setAdviceList(adviceList);
+        responseData.setData(wrapData);
+        return responseData;
     }
 
     @Override
@@ -101,6 +115,51 @@ public class UserServiceImpl implements UserService {
             responseData.setCode(0);
             responseData.setData(wrapData);
         }
+        return responseData;
+    }
+
+    @Override
+    public ResponseData queryInfoById(int id) {
+        ResponseData responseData = new ResponseData();
+        WrapData wrapData = new WrapData();
+        wrapData.setUser(userDao.queryUserInfoById(id));
+        responseData.setMsg(MsgStatus.SUCCESS.getMsg());
+        responseData.setCode(0);
+        responseData.setData(wrapData);
+        return responseData;
+    }
+
+    @Override
+    public ResponseData updateUserInfo(int id, User user) {
+        ResponseData responseData = new ResponseData();
+        WrapData wrapData = new WrapData();
+        try {
+            userDao.updateUserInfoById(id, user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseData.setCode(1);
+            responseData.setMsg(MsgStatus.ERROR.getMsg());
+        }
+        responseData.setMsg(MsgStatus.SUCCESS.getMsg());
+        responseData.setCode(0);
+        responseData.setData(wrapData);
+        return responseData;
+    }
+
+    @Override
+    public ResponseData updateDevice(int userId, int deviceId) {
+        ResponseData responseData = new ResponseData();
+        WrapData wrapData = new WrapData();
+        try {
+            userDao.updateDeviceStatus(userId, deviceId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseData.setCode(1);
+            responseData.setMsg(MsgStatus.ERROR.getMsg());
+        }
+        responseData.setMsg(MsgStatus.SUCCESS.getMsg());
+        responseData.setCode(0);
+        responseData.setData(wrapData);
         return responseData;
     }
 }

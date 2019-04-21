@@ -23,7 +23,13 @@ public class ReportController {
 
     }
 
-    public ResponseData reportAdvice() {
-        return null;
+    @GetMapping("/advice")
+    public ResponseData reportAdvice(@RequestParam("id") int id) {
+        try {
+            return userService.queryAdvice(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

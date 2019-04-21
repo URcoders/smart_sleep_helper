@@ -20,4 +20,5 @@ public class User {
     private Double sleepScoreAvg;
     private Double sleepTimeAvg;
     private Integer deviceId;
+    private Double power;
 }

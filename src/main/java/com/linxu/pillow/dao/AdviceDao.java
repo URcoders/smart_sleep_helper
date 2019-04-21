@@ -1,6 +1,9 @@
 package com.linxu.pillow.dao;
 
-import org.apache.ibatis.annotations.Mapper;
+import com.linxu.pillow.models.Advice;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 /**
  * @author linxu
@@ -8,4 +11,8 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface AdviceDao {
+    @Select("select * from user_advice where user_id=#{id}")
+    List<Integer> queryAdviceIdsByUserId(@Param("id") int id);
+    @Select("select * from advice where id = #{id}")
+    Advice queryAdviceByAdviceId(@Param("id") int id);
 }
